@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+
+.homepage__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  grid-template-areas: ". fillForm readForm .";
+
+  /* .fillForm__Container {
+    grid-area: fillForm;
+    width: 20vw;
+    height: auto;
+
+  }
+
+  .readForm__Container {
+    grid-area: readForm;
+    width: 20vw;
+    height: auto;
+
+  } */
+
+}

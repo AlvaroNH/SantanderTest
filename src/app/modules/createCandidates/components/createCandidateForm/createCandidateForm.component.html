@@ -1,0 +1,52 @@
+<mat-card class="createCandidate__formContainer" appearance="outlined">
+	<mat-card-header>Creación de candidatos</mat-card-header>
+	<mat-card-content>
+		<p>Introduzca los datos del candidato en el siguiente formulario:</p>
+		<form class="candidateForm__container" [formGroup]="candidateForm">
+			<mat-form-field appearance="fill" autocomplete="off">
+				<mat-label>Nombre</mat-label>
+				<input matInput formControlName="name" />
+				@if (formUtils.isValidField( candidateForm, 'name')) {
+				<mat-error>{{ formUtils.getFieldError(candidateForm, 'name') }}</mat-error>
+				}
+			</mat-form-field>
+
+			<mat-form-field appearance="fill" autocomplete="off">
+				<mat-label>Apellido</mat-label>
+				<input matInput formControlName="surname" />
+				@if (formUtils.isValidField( candidateForm, 'surname')) {
+				<mat-error>{{ formUtils.getFieldError(candidateForm, 'surname') }}</mat-error>
+				}
+			</mat-form-field>
+
+			<mat-label>Nivel</mat-label>
+			<mat-radio-group formControlName="seniority" aria-label="Select an option">
+				<mat-radio-button value="Junior">Junior</mat-radio-button>
+				<mat-radio-button value="Senior">Senior</mat-radio-button>
+			</mat-radio-group>
+
+			<mat-form-field appearance="fill" autocomplete="off">
+				<mat-label>Años de experiencia</mat-label>
+				<input matInput type="number" formControlName="yearsExperience" />
+				@if (formUtils.isValidField( candidateForm, 'yearsExperience')) {
+				<mat-error>{{ formUtils.getFieldError(candidateForm, 'yearsExperience') }}</mat-error>
+				}
+			</mat-form-field>
+			<mat-checkbox
+				class="example-margin"
+				formControlName="availability"
+				[checked]="candidateForm.get('availability')?.value"
+			>
+				Tengo disponibilidad inmediata
+			</mat-checkbox>
+		</form>
+	</mat-card-content>
+
+	<mat-card-actions align="end">
+		<button mat-raised-button color="warn" (click)="onReset()" [disabled]="!candidateForm.dirty">
+			Borrar formulario
+		</button>
+
+		<button mat-raised-button color="primary" (click)="onSubmit()" >Crear candidato</button>
+	</mat-card-actions>
+</mat-card>
