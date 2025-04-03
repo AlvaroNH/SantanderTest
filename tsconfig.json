@@ -11,6 +11,12 @@
       "@/*": [
         "./src/*"
       ],
+      "@shared/*": [
+        "./src/app/modules/shared/*"
+      ],
+      "@env/*": [
+        "./src/environments/*"
+      ],
     },
     "outDir": "./dist/out-tsc",
     "strict": true,

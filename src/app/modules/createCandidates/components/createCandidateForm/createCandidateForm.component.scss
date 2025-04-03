@@ -12,3 +12,13 @@ mat-form-field {
 mat-card-actions {
 	gap: 2em;
 }
+
+.radioButton__container{
+  display: flex;
+  gap: 1em;
+  align-items: center;
+
+  mat-error{
+    margin-inline: 1.5em;
+  }
+}

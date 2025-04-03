@@ -5,7 +5,7 @@ import CreateCandidateFormComponent from '../../components/createCandidateForm/c
 	selector: 'app-create-candidate-view',
 	imports: [CreateCandidateFormComponent],
 	templateUrl: './createCandidateView.component.html',
-	styleUrl: './createCandidateView.component.css',
+	styleUrl: './createCandidateView.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class CreateCandidateViewComponent {}
