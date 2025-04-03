@@ -1,59 +1,40 @@
-# Santander
+# Santander technical test
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5. The purpose of this project is to create a technical test for Scallian and Santander Bank.
 
-## Development server
+## Previous Considerations
 
-To start a local development server, run:
+Although my goal in this test is to apply for a front-end developer position, I connected a free backend service with a PostgreSQL database. The service used is [Supabase](https://supabase.com/). I didn’t develop any server-side code except for the connection to storage and the database.
 
-```bash
-ng serve
-```
+## Setup
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+To run this project, clone the repository to your local machine and execute the following commands:
 
 ```bash
-ng generate component component-name
+npm i
+npm run serve
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Once the server is running, open your browser and navigate to `http://localhost:4200/`.
 
-```bash
-ng generate --help
-```
+You can launch `npm run serve -o` instead of `npm run serve` and let the browser open alone.
 
-## Building
+## About the architecture
 
-To build the project run:
+Although I used Angular Zoneless (you can check `app.config.ts`) with standalone components, I followed a modular architecture that I learned from developers like Fernando Herrera. This architecture might be a bit verbose, but it allows for scalable implementations while encapsulating functionality effectively.
 
-```bash
-ng build
-```
+Each module contains all the necessary code for its specific functionality, including interfaces, components, composables, services, and any additional dependencies.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+When working with aliases (which might seem a bit forced here), you can rename paths using a pattern like "module-xxx". This allows you to reference services such as createCandidate using an alias like "`@createCandidateService/*`", making paths shorter and improving readability.
 
-## Running unit tests
+It may seem overly expanded, but I designed it this way to ensure that the app can be easily scaled in the future. Currently, we are working with simple Excel files, but they might evolve and integrate with tools like `Power BI`.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Areas for Improvement
 
-```bash
-ng test
-```
+- Security - Some keys are hardcoded. The best approach would be to use authenticated users in Supabase and proper authentication mechanisms. I didn’t implement this correctly because it was an additional feature beyond the test scope, and I didn’t want to spend more time on it than planned.
 
-## Running end-to-end tests
+- Testing – I wrote some tests, but I didn’t test the service layer. I need to read more about testing in Supabase to properly mock it.
 
-For end-to-end (e2e) testing, run:
+- Karma & Mocha – I used these tools because they are integrated with Angular and I’m familiar with them. However, given the new paradigm in Angular, switching to Jest would be a better approach.
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- More Encapsulation – I want to further encapsulate components like inputs, but I didn’t do it yet because I want to implement them correctly. I’ve learned the hard way that poorly planned components can become too rigid, especially when working with forms.
