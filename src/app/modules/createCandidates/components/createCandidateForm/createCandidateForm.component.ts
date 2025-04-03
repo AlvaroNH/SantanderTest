@@ -50,7 +50,7 @@ export default class CreateCandidateFormComponent {
 	candidateForm = this.fb.group({
 		name: ['', [Validators.required]],
 		surname: ['', [Validators.required]],
-		seniority: [undefined, [Validators.required]],
+		seniority: [Seniority.Junior, [Validators.required]],
 		yearsExperience: [0, [Validators.required]],
 		availability: [false],
 	});

@@ -29,7 +29,6 @@ export class CreateCandidateService {
    * 5. Logs a success message if the operation is successful.
    */
 	createCandidate = async (candidateForm: CandidateFormInterface) => {
-		const formValues = candidateForm;
 
 		const newExcelData: ExcelCandidateDataInterface = {
 			seniority: candidateForm.seniority ?? Seniority.Junior,
@@ -38,8 +37,8 @@ export class CreateCandidateService {
 		};
 
 		const requestData = {
-			name: formValues.name,
-			surname: formValues.surname,
+			name: candidateForm.name,
+			surname: candidateForm.surname,
 			...newExcelData,
 		};
 
