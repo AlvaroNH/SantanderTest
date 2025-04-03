@@ -1,16 +1,18 @@
 <div class="homepage__container">
 	<div class="fillForm__Container">
-		<!-- <img src="assets/images/fillCandidateForm.jpg" alt=""> -->
-		<button mat-fab extended [routerLink]="'add-candidates'">
-			<mat-icon>edit_note</mat-icon>
-			Introducir Candidatos
-		</button>
+		<mat-card class="cardOption__Container" [routerLink]="'add-candidates'" appearance="outlined">
+      <mat-card-header>Crear candidato</mat-card-header>
+			<mat-card-content>
+				<img class="cardOption__image" src="assets/images/createCandidate.jpg" alt="" />
+			</mat-card-content>
+		</mat-card>
 	</div>
 	<div class="readForm__Container">
-		<!-- <img src="assets/images/viewCandidates.jpg" alt=""> -->
-		<button mat-fab extended [routerLink]="'view-candidates'">
-			<mat-icon>fact_check</mat-icon>
-			Visualizar Candidatos
-		</button>
+		<mat-card class="cardOption__Container" [routerLink]="'view-candidates'" appearance="outlined">
+      <mat-card-header>Visualizar candidatos</mat-card-header>
+			<mat-card-content>
+				<img class="cardOption__image" src="assets/images/visualizeCandidate.jpg" alt="" />
+			</mat-card-content>
+		</mat-card>
 	</div>
 </div>

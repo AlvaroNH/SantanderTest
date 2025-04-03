@@ -1,22 +1,26 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+// * Angular core
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
+// * Angular Material
+import { MatButton } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { FormUtils } from '../../../shared/utils/form.utils';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatCardModule } from '@angular/material/card';
-import { MatButton } from '@angular/material/button';
-import { ExcelService } from '../../../shared/services/excel.service';
-import { ExcelCandidateDataInterface } from '../../../shared/interfaces/candidateForm.interface';
-import { Seniority } from '../../../shared/interfaces/seniority.enum';
-import { ConnectionService } from '../../../shared/services/connection.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+// * Propios
+import { CreateCandidateService } from '../../services/createCandidate.service';
+import { FormUtils } from '@shared/utils/form.utils';
+import { Seniority, CandidateFormInterface } from '@shared/interfaces';
 
 @Component({
 	selector: 'st-create-candidate-form',
 	imports: [
-		MatCardModule,
 		MatButton,
+		MatCardModule,
 		MatCheckboxModule,
 		MatFormFieldModule,
 		MatInputModule,
@@ -28,11 +32,20 @@ import { ConnectionService } from '../../../shared/services/connection.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class CreateCandidateFormComponent {
+	// * Inyecciones
 	private fb = inject(FormBuilder);
-	private excel = inject(ExcelService);
-	private cService = inject(ConnectionService);
+	private _snackBar = inject(MatSnackBar);
+	private ccService = inject(CreateCandidateService);
 
 	formUtils = FormUtils;
+
+	//* Computed property to get the list of seniority levels in order to iterate it
+	seniority = computed(() => {
+		return Object.entries(Seniority).map(([key, value]) => ({
+			key,
+			value,
+		}));
+	});
 
 	candidateForm = this.fb.group({
 		name: ['', [Validators.required]],
@@ -42,46 +55,51 @@ export default class CreateCandidateFormComponent {
 		availability: [false],
 	});
 
+	/**
+	 * Resets the candidate form to its initial state.
+	 * This method clears all form fields and sets the `yearsExperience` field to 0.
+	 */
 	onReset() {
 		this.candidateForm.reset();
 		this.candidateForm.patchValue({ yearsExperience: 0 });
 	}
 
+	/**
+	 * Handles the submission of the candidate creation form.
+	 *
+	 * This method validates the form, extracts its values, and sends the data
+	 * to the candidate creation service. If the form is invalid, it marks all
+	 * fields as touched to display validation errors. Upon successful submission,
+	 * it displays a success message and resets the form. If an error occurs during
+	 * the process, it logs the error and displays an error message.
+	 *
+	 * @async
+	 * @returns {Promise<void>} A promise that resolves when the submission process is complete.
+	 */
 	async onSubmit() {
 		if (this.candidateForm.invalid) {
 			this.candidateForm.markAllAsTouched();
 			return;
 		}
-		// console.log(this.candidateForm);
-
-		// this.candidateForm.reset();
-		// this.candidateForm.patchValue({ yearsExperience: 0 });
-
-		if (this.candidateForm) {
-			const formValues = this.candidateForm.value;
-
-			const newExcelData: ExcelCandidateDataInterface = {
+		try {
+			const formValue: CandidateFormInterface = {
+				name: this.candidateForm.get('name')?.value ?? '',
+				surname: this.candidateForm.get('surname')?.value ?? '',
 				seniority: this.candidateForm.get('seniority')?.value ?? Seniority.Junior,
 				yearsExperience: this.candidateForm.get('yearsExperience')?.value ?? 0,
 				availability: this.candidateForm.get('availability')?.value ?? false,
 			};
 
-			const requestData = {
-				name: formValues.name,
-				surname: formValues.surname,
-				...newExcelData,
-			};
-
-			const blob = this.excel.exportToExcel([newExcelData]);
-			const file = new File([blob], `${requestData.surname}_${requestData.name}`, {
-				type: blob.type,
-			});
-
-			const resultado = await this.cService.saveFormDataWithExcel(requestData, file);
-
-			if (resultado) {
-				console.log('Datos y archivo guardados correctamente:', resultado);
+			if (this.candidateForm && this.candidateForm.value) {
+				this.ccService.createCandidate(formValue);
 			}
+			this._snackBar.open('Candidato creado correctamente', 'Ok');
+
+			this.candidateForm.reset();
+			this.candidateForm.patchValue({ yearsExperience: 0 });
+		} catch (error) {
+			console.error(`Error al guardar los datos: ${error}`);
+			this._snackBar.open('Ha habido un error al crear el candidato', 'Ouch');
 		}
 	}
 }

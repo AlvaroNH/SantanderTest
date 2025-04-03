@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createClient } from '@supabase/supabase-js';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '@env/environment.development';
+import { CandidateTable } from '@shared/interfaces';
 
 @Injectable({
 	providedIn: 'root',
@@ -10,7 +11,6 @@ export class ConnectionService {
 	private supabaseKey: string = environment.APP_SUPABASE_ANON_KEY;
 	private supabase = createClient(this.supabaseUrl, this.supabaseKey);
 
-
 	async saveFormDataWithExcel(formData: any, archivo: File) {
 		const isAuthenticated = await this.checkAuth();
 		if (!isAuthenticated) return null;
@@ -18,7 +18,6 @@ export class ConnectionService {
 			let archivoUrl: string | null = null;
 
 			if (archivo) {
-				debugger;
 				const archivoName = `${Date.now()}-${archivo.name}.xlsx`;
 
 				const { error: uploadError } = await this.supabase.storage
@@ -48,14 +47,14 @@ export class ConnectionService {
 		}
 	}
 
-	async getFormData() {
+	async getFormData(): Promise<CandidateTable[]> {
 		const isAuthenticated = await this.checkAuth();
-		if (!isAuthenticated) return null;
+		if (!isAuthenticated) throw new Error('No authenticated');
 
 		const { data, error } = await this.supabase.from('formdata').select('*');
 		if (error) {
-			console.error('Error al obtener los registros:', error);
-			return null;
+			console.error();
+			throw new Error('Error al obtener los registros:', error);
 		}
 		return data;
 	}

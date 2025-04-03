@@ -20,9 +20,17 @@
 			</mat-form-field>
 
 			<mat-label>Nivel</mat-label>
-			<mat-radio-group formControlName="seniority" aria-label="Select an option">
-				<mat-radio-button value="Junior">Junior</mat-radio-button>
-				<mat-radio-button value="Senior">Senior</mat-radio-button>
+			<mat-radio-group
+				class="radioButton__container"
+				formControlName="seniority"
+				aria-label="Select an option"
+			>
+				@for (level of seniority(); track level) {
+				<mat-radio-button [value]="level.value">{{ level.key }}</mat-radio-button>
+				}
+        @if (formUtils.isValidField( candidateForm, 'seniority')) {
+				<mat-error>{{ formUtils.getFieldError(candidateForm, 'seniority') }}</mat-error>
+				}
 			</mat-radio-group>
 
 			<mat-form-field appearance="fill" autocomplete="off">
@@ -37,7 +45,7 @@
 				formControlName="availability"
 				[checked]="candidateForm.get('availability')?.value"
 			>
-				Tengo disponibilidad inmediata
+				Tiene disponibilidad inmediata
 			</mat-checkbox>
 		</form>
 	</mat-card-content>
@@ -47,6 +55,6 @@
 			Borrar formulario
 		</button>
 
-		<button mat-raised-button color="primary" (click)="onSubmit()" >Crear candidato</button>
+		<button mat-raised-button color="primary" (click)="onSubmit()">Crear candidato</button>
 	</mat-card-actions>
 </mat-card>
